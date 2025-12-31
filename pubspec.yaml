@@ -1,0 +1,57 @@
+name: pakcraft
+description: "shopping app"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.2.2 
+  http: ^1.6.0
+  get: ^4.7.3
+  fluttertoast: ^9.0.0
+  image_picker: ^1.0.7
+  cached_network_image: ^3.3.0    # Caches images (Fixes Lag)
+  flutter_staggered_animations: ^1.1.1 
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1  # Added
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    # Main assets
+    - assets/logo.png
+    - assets/Bg.png
+    - assets/profile_pic.jpg
+    
+    # Category logos
+    - assets/logos/jewelry.png
+    - assets/logos/pottery.png
+    - assets/logos/textile.png
+    - assets/logos/rug.png
+    
+    # Product images
+    - assets/Products/1.jpg
+    - assets/Products/2.jpg
+    - assets/Products/3.png
+    - assets/Products/4.png
+    
+    # Featured images
+    - assets/Products/Featured.jpg
+    - assets/Products/1.jpg
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo.png"
+  adaptive_icon_background: "#FFFF7F11"
