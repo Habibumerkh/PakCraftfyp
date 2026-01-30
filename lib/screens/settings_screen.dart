@@ -7,105 +7,70 @@ import 'package:pakcraft/api_connection/model/user.dart';
 import 'package:pakcraft/credentials/user_pref/userpref.dart';
 import 'package:pakcraft/screens/login_screen.dart';
 import 'package:pakcraft/screens/reset_password.dart';
+import 'package:pakcraft/screens/static_screens.dart'; // <--- IMPORT THIS
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
-  // --- DELETE ACCOUNT LOGIC WITH POPUP ---
+  // --- DELETE ACCOUNT LOGIC ---
   Future<void> _deleteAccount(BuildContext context) async {
-    // 1. Get User Info
     User? user = await RemUSer.readUSerInfo();
     if (user == null) return;
 
-    // 2. SHOW CONFIRMATION DIALOG
-    bool? confirm = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext ctx) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: const Column(
-            children: [
-              Icon(Icons.warning_amber_rounded, color: Colors.red, size: 50),
-              SizedBox(height: 10),
-              Text(
-                "Delete Account?",
-                style: TextStyle(fontWeight: FontWeight.bold),
+    bool confirm =
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            title: const Text(
+              "Delete Account?",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: const Text(
+              "This action is permanent. All your data, products, and orders will be removed.",
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text(
+                  "Cancel",
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text(
+                  "Delete",
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           ),
-          content: const Text(
-            "This action cannot be undone. All your orders, products, and data will be permanently removed.",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.grey),
-          ),
-          actionsAlignment: MainAxisAlignment.center,
-          actions: [
-            // Cancel Button
-            OutlinedButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Colors.grey),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-            const SizedBox(width: 10),
-            // Delete Button
-            ElevatedButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                "Delete",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+        ) ??
+        false;
 
-    // 3. IF USER CLICKED DELETE
-    if (confirm == true) {
+    if (confirm) {
       try {
-        // Reuse the Admin Delete API
         var res = await http.post(
           Uri.parse(API.deleteUser),
           body: {"user_id": user.user_id.toString()},
         );
 
         if (res.statusCode == 200) {
-          // Clear Local Data
           await RemUSer.removeUser();
-
-          // Show Message
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Account Deleted Successfully"),
-              backgroundColor: Colors.red,
-            ),
-          );
-
-          // Force Logout to Login Screen
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (c) => const LoginScreen()),
-            (route) => false,
+            (r) => false,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Account Deleted Successfully")),
           );
         }
       } catch (e) {
@@ -201,13 +166,12 @@ class SettingsScreen extends StatelessWidget {
                     },
                   ),
 
-                  // Delete Option
                   _settingsOption(
                     icon: Icons.delete_forever_outlined,
                     text: "Delete Account",
                     textColor: Colors.red,
                     iconColor: Colors.red,
-                    onTap: () => _deleteAccount(context), // <--- CALLS POPUP
+                    onTap: () => _deleteAccount(context),
                   ),
                 ],
               ),
@@ -242,27 +206,28 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
+                  // LINKED PRIVACY POLICY
                   _settingsOption(
                     icon: Icons.privacy_tip_outlined,
                     text: "Privacy Policy",
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Data is stored locally and securely."),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (c) => const PrivacyPolicyScreen(),
                         ),
                       );
                     },
                   ),
 
+                  // LINKED ABOUT SCREEN
                   _settingsOption(
                     icon: Icons.info_outline,
                     text: "About PakCraft",
                     onTap: () {
-                      showAboutDialog(
-                        context: context,
-                        applicationName: "PakCraft",
-                        applicationVersion: "1.0.0",
-                        applicationLegalese: "© 2024 PakCraft Inc.",
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (c) => const AboutScreen()),
                       );
                     },
                   ),
@@ -308,7 +273,7 @@ class SettingsScreen extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
-        color: Colors.transparent,
+        color: Colors.transparent, // Makes the whole row clickable
         child: Row(
           children: [
             Container(

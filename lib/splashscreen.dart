@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pakcraft/api_connection/model/user.dart';
@@ -21,26 +23,25 @@ class _SplashScreenState extends State<SplashScreen> {
 
   // --- LOGIC TO CHECK IF LOGGED IN ---
   Future<void> _checkLoginStatus() async {
-    // 1. Keep the splash visible for 3 seconds (UI Experience)
+    // 1. Keep the splash visible for 3 seconds
     await Future.delayed(const Duration(seconds: 3));
 
-    // 2. Check if User Info exists in Phone Storage
+    // 2. Check if User Info exists
     User? userInfo = await RemUSer.readUSerInfo();
 
-    if (!mounted) return; // Safety check
+    if (!mounted) return;
 
     if (userInfo == null) {
-      // CASE A: Not Logged In -> Go to Welcome Screen
+      // Not Logged In -> Go to Welcome Screen
       Navigator.pushReplacementNamed(context, '/welcome');
     } else {
-      // CASE B: Logged In -> Check Role & Redirect
+      // Logged In -> Redirect based on Role
       if (userInfo.role == 'admin') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const AdminDashboard()),
         );
       } else {
-        // Seller or Customer -> Go to Home
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -52,82 +53,107 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFE0DCD3), // Beige Theme Background
       body: Stack(
         children: [
-          // 1. THEME GRADIENT BACKGROUND
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF100D0D), Color(0xFFFF7F11)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0.2, 1.0],
+          // Optional: Subtle Background Decoration
+          Positioned(
+            top: -50,
+            left: -50,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                color: const Color(
+                  0xFFFF7F11,
+                ).withOpacity(0.05), // Faint Orange
+                shape: BoxShape.circle,
               ),
             ),
           ),
 
-          // 2. CENTER CONTENT
+          // --- CENTER CONTENT ---
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // --- GLOWING LOGO ---
+                // 1. Logo Container
                 Container(
-                  width: 150,
-                  height: 150,
+                  width: 140,
+                  height: 140,
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
+                    color: Colors.white,
                     shape: BoxShape.circle,
-                    // Neon Glow Effect
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFFF7F11).withOpacity(0.6),
-                        blurRadius: 60,
-                        spreadRadius: 10,
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
                       ),
                     ],
-                    image: const DecorationImage(
-                      image: AssetImage('assets/logo.png'),
-                      fit: BoxFit.cover,
-                    ),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.5),
-                      width: 3,
-                    ),
+                  ),
+                  child: ClipOval(
+                    child: Image.asset('assets/logo.png', fit: BoxFit.cover),
                   ),
                 ),
 
                 const SizedBox(height: 30),
 
-                // --- APP NAME ---
+                // 2. App Name
                 const Text(
                   "PAKCRAFT",
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
+                    color: Color(0xFF3B281D), // Deep Brown
+                    fontSize: 36,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: 5,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 10.0,
-                        color: Colors.black45,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
+                    letterSpacing: 4,
                   ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // 3. Intro Text / Slogan
+                Text(
+                  "Connecting Artisans to the World",
+                  style: TextStyle(
+                    color: Colors.grey[700],
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  "Handcrafted • Authentic • Local",
+                  style: TextStyle(color: Colors.grey[500], fontSize: 12),
                 ),
               ],
             ),
           ),
 
-          // 3. BOTTOM LOADER
-          Positioned(
-            bottom: 50,
+          // 4. Bottom Loading Indicator
+          const Positioned(
+            bottom: 60,
             left: 0,
             right: 0,
             child: Center(
               child: CircularProgressIndicator(
-                color: Colors.white.withOpacity(0.5),
-                strokeWidth: 2,
+                color: Color(0xFFFF7F11), // Orange Accent
+                strokeWidth: 3,
+              ),
+            ),
+          ),
+
+          // 5. Version Number (Optional Polish)
+          const Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                "v1.0.0",
+                style: TextStyle(color: Colors.grey, fontSize: 10),
               ),
             ),
           ),

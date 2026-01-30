@@ -1,7 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
-import 'dart:ui'; // Required for Blur Effect
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,7 +27,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     try {
       var res = await http.post(
-        Uri.parse(API.validateEmail), 
+        Uri.parse(API.validateEmail),
         body: {"email": email},
       );
 
@@ -38,15 +35,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
       if (data['success'] == true) {
         String serverOtp = data['otp'].toString();
-        Fluttertoast.showToast(msg: "OTP sent successfully!");
+        Fluttertoast.showToast(msg: "OTP sent to your email!");
 
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OtpVerificationScreen(
-              email: email, 
-              correctOtp: serverOtp
-            ),
+            builder: (context) =>
+                OtpVerificationScreen(email: email, correctOtp: serverOtp),
           ),
         );
       } else {
@@ -55,130 +50,213 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     } catch (e) {
       Fluttertoast.showToast(msg: "Error: $e");
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Stack(
-        children: [
-          // 1. Dark Gradient Background
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF100D0D), Color(0xFFFF7F11)],
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
-                stops: [0.4, 1.0],
+      backgroundColor: const Color(0xFFE0DCD3), // Beige BG
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            // --- 1. CURVED DARK HEADER ---
+            Container(
+              height: size.height * 0.35,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Color(0xFF3B281D), // Deep Brown
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
               ),
-            ),
-          ),
-          
-          // 2. Content
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
-                  // Big Decorative Icon with Glow
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(color: const Color(0xFFFF7F11).withOpacity(0.5), blurRadius: 40, spreadRadius: 5),
-                      ],
-                    ),
-                    child: const Icon(Icons.lock_open_rounded, size: 80, color: Colors.white),
-                  ),
-                  
-                  const SizedBox(height: 40),
-                  
-                  const Text(
-                    "Forgot\nPassword?",
-                    style: TextStyle(
-                      color: Colors.white, 
-                      fontSize: 40, 
-                      fontWeight: FontWeight.bold,
-                      height: 1.1,
+                  // Back Button (White on Dark)
+                  Positioned(
+                    top: 50,
+                    left: 20,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Enter your email and we will send you a secret code to reset it.",
-                    style: TextStyle(color: Colors.white60, fontSize: 16),
-                  ),
-                  
-                  const SizedBox(height: 40),
-                  
-                  // GLASSMORPHISM INPUT FIELD
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.white.withOpacity(0.2)),
-                        ),
-                        child: TextField(
-                          controller: _emailController,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.alternate_email, color: Color(0xFFFF7F11)),
-                            hintText: "Enter Email Address",
-                            hintStyle: TextStyle(color: Colors.white38),
-                            border: InputBorder.none,
-                          ),
+                  // Header Title
+                  const Positioned(
+                    top: 100,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        "Recovery",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
                         ),
                       ),
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 40),
-                  
-                  // Floating Action Button Style Submit
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _sendOtp,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF7F11),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 10,
-                        shadowColor: const Color(0xFFFF7F11).withOpacity(0.5),
-                      ),
-                      child: _isLoading 
-                        ? const CircularProgressIndicator(color: Colors.white) 
-                        : const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Send Code", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                              SizedBox(width: 10),
-                              Icon(Icons.arrow_forward, color: Colors.white),
-                            ],
-                          ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+
+            // --- 2. FLOATING CONTENT CARD ---
+            Container(
+              margin: EdgeInsets.only(top: size.height * 0.25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        // Icon Circle
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey.shade200),
+                          ),
+                          child: const Icon(
+                            Icons.lock_reset,
+                            size: 50,
+                            color: Color(0xFFFF7F11),
+                          ),
+                        ),
+
+                        const SizedBox(height: 25),
+
+                        const Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF3B281D),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Enter the email address associated with your account. We will send you a code.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                        ),
+
+                        const SizedBox(height: 35),
+
+                        // Input Field
+                        Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: TextField(
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.email_outlined,
+                                color: Colors.grey[600],
+                              ),
+                              hintText: "Enter Email Address",
+                              hintStyle: TextStyle(color: Colors.grey[400]),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Send Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 55,
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _sendOtp,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(
+                                0xFFFF7F11,
+                              ), // Orange
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    "Send Code",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // Footer
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.arrow_back,
+                          size: 16,
+                          color: Color(0xFF3B281D),
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          "Back to Login",
+                          style: TextStyle(
+                            color: Color(0xFF3B281D),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

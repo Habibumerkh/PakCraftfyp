@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,6 +19,7 @@ class ResetPasswordScreen extends StatefulWidget {
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _passController = TextEditingController();
   final _confirmPassController = TextEditingController();
+
   bool _isLoading = false;
 
   Future<void> _updatePassword() async {
@@ -30,6 +30,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       Fluttertoast.showToast(msg: "Password too short");
       return;
     }
+
     if (newPass != confirmPass) {
       Fluttertoast.showToast(msg: "Passwords don't match");
       return;
@@ -44,9 +45,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       );
 
       var data = json.decode(res.body);
+
       if (data['success'] == true) {
         Fluttertoast.showToast(msg: "Success! Please Login.");
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (r) => false);
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (r) => false,
+        );
       } else {
         Fluttertoast.showToast(msg: "Update Failed");
       }
@@ -59,85 +66,207 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF100D0D), Color(0xFFFF7F11)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0.1, 0.9],
+      backgroundColor: const Color(0xFFE0DCD3), // Beige Background
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            // -------- HEADER --------
+            Container(
+              height: size.height * 0.35,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Color(0xFF3B281D), // Brown
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
               ),
-            ),
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(30),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
-                  const SizedBox(height: 30),
-                  const Text("Reset\nPassword", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold, height: 1.1)),
-                  const SizedBox(height: 10),
-                  const Text("Create a strong new password.", style: TextStyle(color: Colors.white60, fontSize: 16)),
-                  
-                  const SizedBox(height: 50),
-                  
-                  _glassField(_passController, "New Password"),
-                  const SizedBox(height: 20),
-                  _glassField(_confirmPassController, "Confirm Password"),
-                  
-                  const SizedBox(height: 50),
-                  
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: _isLoading ? null : _updatePassword,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFF7F11),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                        elevation: 10,
+                  // Back Button
+                  Positioned(
+                    top: 50,
+                    left: 20,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
                       ),
-                      child: _isLoading 
-                        ? const CircularProgressIndicator(color: Colors.white) 
-                        : const Text("Update Password", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+
+                  // Title
+                  const Positioned(
+                    top: 100,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        "Reset Password",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+
+            // -------- CARD --------
+            Container(
+              margin: EdgeInsets.only(top: size.height * 0.25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        // Icon
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey.shade200),
+                          ),
+                          child: const Icon(
+                            Icons.lock_reset,
+                            size: 50,
+                            color: Color(0xFFFF7F11),
+                          ),
+                        ),
+
+                        const SizedBox(height: 25),
+
+                        const Text(
+                          "Create New Password",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF3B281D),
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        Text(
+                          "Set a strong password for\n${widget.email}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                        ),
+
+                        const SizedBox(height: 35),
+
+                        // New Password
+                        _inputField(
+                          controller: _passController,
+                          hint: "New Password",
+                          icon: Icons.lock_outline,
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Confirm Password
+                        _inputField(
+                          controller: _confirmPassController,
+                          hint: "Confirm Password",
+                          icon: Icons.lock,
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 55,
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _updatePassword,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFFF7F11),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    "Update Password",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _glassField(TextEditingController controller, String hint) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(30),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.white.withOpacity(0.2)),
-          ),
-          child: TextField(
-            controller: controller,
-            obscureText: true,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              icon: const Icon(Icons.lock_outline_rounded, color: Colors.white70),
-              hintText: hint,
-              hintStyle: const TextStyle(color: Colors.white38),
-              border: InputBorder.none,
-            ),
-          ),
+  // -------- INPUT FIELD --------
+  Widget _inputField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: true,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Color(0xFF3B281D),
+          fontWeight: FontWeight.w600,
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hint,
+          hintStyle: const TextStyle(color: Colors.black26),
+          prefixIcon: Icon(icon, color: Colors.grey),
         ),
       ),
     );

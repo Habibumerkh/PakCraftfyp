@@ -1,89 +1,154 @@
-import 'dart:ui'; // Required for Glass Effect
 import 'package:flutter/material.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
   @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize Animation
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+
+    // Start Animation
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFE0DCD3), // Beige Background
       body: Stack(
         children: [
-          // 1. THEME GRADIENT BACKGROUND
-          // Replaces the image to match Login/Signup perfectly
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF100D0D), Color(0xFFFF7F11)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0.2, 1.0],
+          // --- 1. CURVED BACKGROUND SHAPE ---
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: size.height * 0.55,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFF3B281D), // Deep Brown
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(60),
+                  bottomRight: Radius.circular(60),
+                ),
+              ),
+              child: Stack(
+                children: [
+                  // Decorative Circle (Faint)
+                  Positioned(
+                    top: -50,
+                    right: -50,
+                    child: Container(
+                      width: 200,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.05),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
 
-          // 2. CONTENT
+          // --- 2. CONTENT ---
           SafeArea(
             child: Column(
               children: [
-                SizedBox(height: screenHeight * 0.15),
+                const SizedBox(height: 60),
 
-                // --- GLOWING LOGO ---
-                Center(
+                // --- ANIMATED LOGO ---
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            blurRadius: 30,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: const CircleAvatar(
+                        radius: 70,
+                        backgroundImage: AssetImage("assets/logo.png"),
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                // --- ANIMATED TEXT ---
+                SlideTransition(
+                  position: _slideAnimation,
                   child: Column(
                     children: [
-                      Container(
-                        height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          // Neon Glow Effect
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFFFF7F11).withOpacity(0.6),
-                              blurRadius: 50,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                          image: const DecorationImage(
-                            image: AssetImage("assets/logo.png"),
-                            fit: BoxFit.cover,
-                          ),
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.5), 
-                            width: 2
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-
-                      // --- TITLE TEXT ---
-                      Text(
+                      const Text(
                         "PAKCRAFT",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: screenWidth * 0.10,
-                          fontWeight: FontWeight.w900, // Extra Bold
-                          letterSpacing: 3,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black.withOpacity(0.5),
-                              offset: const Offset(2, 2),
-                              blurRadius: 10,
-                            )
-                          ]
+                          fontSize: 36,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 4,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      const Text(
-                        "Discover Art. Buy Local.",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                          letterSpacing: 1.2,
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          "Discover Art. Buy Local.",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 16,
+                            letterSpacing: 1.2,
+                          ),
                         ),
                       ),
                     ],
@@ -92,113 +157,88 @@ class WelcomeScreen extends StatelessWidget {
 
                 const Spacer(),
 
-                // --- BUTTONS ---
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 50, left: 30, right: 30),
-                  child: Column(
-                    children: [
-                      // 1. SIGN UP BUTTON (Solid White - High Visibility)
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/signup');
-                        },
-                        child: Container(
+                // --- ANIMATED BUTTONS ---
+                SlideTransition(
+                  position: _slideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 40,
+                    ),
+                    child: Column(
+                      children: [
+                        // SIGN UP BUTTON (Primary - Orange)
+                        SizedBox(
+                          width: double.infinity,
                           height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(40),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 10,
-                                offset: const Offset(0, 5),
+                          child: ElevatedButton(
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/signup'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(
+                                0xFFFF7F11,
+                              ), // Orange
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 25),
-                              const Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black, // Dark text on white
+                              elevation: 8,
+                              shadowColor: const Color(
+                                0xFFFF7F11,
+                              ).withOpacity(0.5),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Get Started",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              const Spacer(),
-                              Container(
-                                height: 48,
-                                width: 48,
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF100D0D), // Dark Circle
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.arrow_forward,
+                                SizedBox(width: 10),
+                                Icon(
+                                  Icons.arrow_forward_rounded,
                                   color: Colors.white,
-                                  size: 20,
                                 ),
-                              ),
-                              const SizedBox(width: 6),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
 
-                      const SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
-                      // 2. LOGIN BUTTON (Glassmorphism - Modern Look)
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/login');
-                        },
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                            child: Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.15), // See-through
-                                borderRadius: BorderRadius.circular(40),
-                                border: Border.all(color: Colors.white.withOpacity(0.3)),
+                        // LOGIN BUTTON (Secondary - Outline/Brown)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 60,
+                          child: OutlinedButton(
+                            onPressed: () =>
+                                Navigator.pushNamed(context, '/login'),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                color: Color(0xFF3B281D),
+                                width: 2,
                               ),
-                              child: Row(
-                                children: [
-                                  const SizedBox(width: 25),
-                                  const Text(
-                                    "Login",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white, // White text on glass
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Container(
-                                    height: 48,
-                                    width: 48,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.2), // Light Circle
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.login,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                ],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: const Text(
+                              "I already have an account",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF3B281D),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
           ),

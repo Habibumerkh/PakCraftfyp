@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pakcraft/screens/reset_password.dart';
@@ -7,7 +6,11 @@ class OtpVerificationScreen extends StatefulWidget {
   final String email;
   final String correctOtp;
 
-  const OtpVerificationScreen({super.key, required this.email, required this.correctOtp});
+  const OtpVerificationScreen({
+    super.key,
+    required this.email,
+    required this.correctOtp,
+  });
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -21,99 +24,212 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       Fluttertoast.showToast(msg: "Verified!");
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => ResetPasswordScreen(email: widget.email)),
+        MaterialPageRoute(
+          builder: (context) => ResetPasswordScreen(email: widget.email),
+        ),
       );
     } else {
-      Fluttertoast.showToast(msg: "Invalid Code");
+      Fluttertoast.showToast(msg: "Invalid Code. Please try again.");
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF100D0D), Color(0xFFFF7F11)],
-                begin: Alignment.bottomRight,
-                end: Alignment.topLeft,
-                stops: [0.2, 1.0],
+      backgroundColor: const Color(0xFFE0DCD3), // Beige Background
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            // --- 1. CURVED HEADER ---
+            Container(
+              height: size.height * 0.35,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Color(0xFF3B281D), // Deep Brown
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
               ),
-            ),
-          ),
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(30),
-              child: Column(
+              child: Stack(
                 children: [
-                  const Icon(Icons.shield_outlined, size: 80, color: Color(0xFFFF7F11)),
-                  const SizedBox(height: 20),
-                  
-                  const Text("Security Check", style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
-                  Text("We sent a code to\n${widget.email}", textAlign: TextAlign.center, style: const TextStyle(color: Colors.white70, fontSize: 16)),
-                  
-                  const SizedBox(height: 50),
-                  
-                  // GLASSY OTP FIELD
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.08),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white.withOpacity(0.3)),
-                        ),
-                        child: TextField(
-                          controller: _otpController,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          maxLength: 4,
-                          style: const TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold, letterSpacing: 15),
-                          decoration: const InputDecoration(
-                            counterText: "",
-                            border: InputBorder.none,
-                            hintText: "0000",
-                            hintStyle: TextStyle(color: Colors.white12),
-                          ),
-                        ),
+                  // Back Button
+                  Positioned(
+                    top: 50,
+                    left: 20,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
                       ),
+                      onPressed: () => Navigator.pop(context),
                     ),
                   ),
-                  
-                  const SizedBox(height: 50),
-                  
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton(
-                      onPressed: _verify,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  // Title
+                  const Positioned(
+                    top: 100,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        "Security Check",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
                       ),
-                      child: const Text("Verify Now", style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+
+            // --- 2. FLOATING CONTENT CARD ---
+            Container(
+              margin: EdgeInsets.only(top: size.height * 0.25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        // Icon Circle
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey.shade200),
+                          ),
+                          child: const Icon(
+                            Icons.security,
+                            size: 50,
+                            color: Color(0xFFFF7F11),
+                          ),
+                        ),
+
+                        const SizedBox(height: 25),
+
+                        const Text(
+                          "Verify It's You",
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF3B281D),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "We've sent a 4-digit code to\n${widget.email}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 14,
+                            height: 1.5,
+                          ),
+                        ),
+
+                        const SizedBox(height: 35),
+
+                        // OTP Input Field
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF5F5F5),
+                            borderRadius: BorderRadius.circular(15),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: TextField(
+                            controller: _otpController,
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            maxLength: 4,
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF3B281D),
+                              letterSpacing: 15, // Spaced out digits
+                            ),
+                            decoration: const InputDecoration(
+                              counterText: "",
+                              border: InputBorder.none,
+                              hintText: "0000",
+                              hintStyle: TextStyle(
+                                color: Colors.black12,
+                                letterSpacing: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Verify Button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 55,
+                          child: ElevatedButton(
+                            onPressed: _verify,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(
+                                0xFFFF7F11,
+                              ), // Orange
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: const Text(
+                              "Verify Code",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Resend Text
+                  TextButton(
+                    onPressed: () {
+                      Fluttertoast.showToast(msg: "Code resent!");
+                    },
+                    child: const Text(
+                      "Didn't receive code? Resend",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

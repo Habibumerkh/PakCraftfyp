@@ -20,7 +20,7 @@ class API {
       "$hostConnect/reset_password.php"; // Linked to DB Update
 
   // -------------------------------------------------------------
-  // 3. ADMIN PANEL (We created these earlier)
+  // 3. ADMIN PANEL
   // -------------------------------------------------------------
 
   static const deleteProduct = "$hostConnect/admin/delete_product.php";

@@ -15,6 +15,7 @@ analyzer:
     duplicate_ignore: ignore
     unused_element: ignore
     unused_field: ignore
+    unused_import: ignore
     use_build_context_synchronously: ignore
 include: package:flutter_lints/flutter.yaml
 

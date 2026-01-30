@@ -1,15 +1,15 @@
-// ignore_for_file: deprecated_member_use, use_build_context_synchronously, empty_catches
+// ignore_for_file: empty_catches
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart'; // ANIMATION PACKAGE
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:http/http.dart' as http;
 import 'package:pakcraft/api_connection/api_connection.dart';
 import 'package:pakcraft/api_connection/model/user.dart';
 import 'package:pakcraft/credentials/user_pref/userpref.dart';
 import 'package:pakcraft/screens/add_product_screen.dart';
 import 'package:pakcraft/screens/cart.dart';
-import 'package:pakcraft/widgets/smart_image.dart'; // IMPORT SMART IMAGE
+import 'package:pakcraft/widgets/smart_image.dart';
 import 'product_detail_screen.dart';
 import 'category_screen.dart';
 
@@ -27,6 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   List _products = [];
   List<String> _favoriteIds = [];
   bool _isLoading = true;
+
+  // Theme Colors based on reference screens
+  final Color bgColor = const Color(0xFFE0DCD3); // Beige
+  final Color primaryDark = const Color(0xFF3B281D); // Deep Brown
+  final Color actionOrange = const Color(0xFFFF7F11); // Orange
 
   @override
   void initState() {
@@ -105,19 +110,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF5A3D2B),
+      backgroundColor: bgColor,
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: RefreshIndicator(
+                color: actionOrange,
                 onRefresh: () async {
                   await _fetchProducts();
                   await _fetchFavoriteIds();
                 },
                 child: SingleChildScrollView(
-                  physics:
-                      const BouncingScrollPhysics(), // Smooth bounce effect
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -139,64 +144,65 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // --- BROKEN DOWN WIDGETS FOR CLEANER CODE ---
-
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
               Container(
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.white24, width: 1),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                    ),
+                  ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(7),
+                  borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
                     'assets/logo.png',
-                    height: 30,
-                    width: 30,
+                    height: 32,
+                    width: 32,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
-              const Text(
+              const SizedBox(width: 12),
+              Text(
                 "Pakcraft",
                 style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w900,
+                  color: primaryDark,
+                  letterSpacing: 1,
                 ),
               ),
             ],
           ),
           if (currentUser != null)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.white10,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white24),
+                color: primaryDark,
+                borderRadius: BorderRadius.circular(25),
               ),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.person,
-                    size: 14,
-                    color: isSeller ? const Color(0xFFFF7F11) : Colors.white,
-                  ),
-                  const SizedBox(width: 5),
+                  Icon(Icons.person, size: 16, color: actionOrange),
+                  const SizedBox(width: 6),
                   Text(
                     "Hi, ${currentUser!.user_name.split(' ')[0]}",
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
@@ -209,24 +215,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSearchBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GestureDetector(
         onTap: () => Navigator.pushNamed(context, '/search'),
         child: Container(
-          height: 48,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
+          height: 55,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: Colors.white12,
-            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 15,
+                offset: const Offset(0, 5),
+              ),
+            ],
           ),
-          child: const Row(
+          child: Row(
             children: [
-              Icon(Icons.search, color: Colors.white, size: 20),
-              SizedBox(width: 10),
-              Expanded(
+              Icon(Icons.search, color: primaryDark.withOpacity(0.5), size: 22),
+              const SizedBox(width: 12),
+              const Expanded(
                 child: Text(
                   "Search handcrafted items...",
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                  style: TextStyle(color: Colors.black38, fontSize: 15),
                 ),
               ),
             ],
@@ -238,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategories() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 22, 16, 26),
+      padding: const EdgeInsets.fromLTRB(20, 25, 20, 25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -263,29 +276,35 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 60,
+            height: 60,
             decoration: BoxDecoration(
-              color: Colors.white12,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(color: Colors.white24),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Center(
               child: Image.asset(
                 path,
-                height: 26,
-                width: 26,
-                color: Colors.white,
+                height: 28,
+                width: 28,
+                color: primaryDark,
               ),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: primaryDark,
               fontSize: 12,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ],
@@ -295,94 +314,105 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildFeaturedSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Featured",
+          Text(
+            "Featured Items",
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: primaryDark,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 15),
           _products.isEmpty
               ? Container(
-                  height: 180,
+                  height: 200,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Colors.white10,
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white.withOpacity(0.5),
                   ),
-                  child: const Center(
-                    child: Text(
-                      "Loading...",
-                      style: TextStyle(color: Colors.white70),
-                    ),
+                  child: Center(
+                    child: CircularProgressIndicator(color: actionOrange),
                   ),
                 )
               : GestureDetector(
                   onTap: () => _openDetail(_products[0]),
-                  child: Stack(
-                    children: [
-                      // OPTIMIZED IMAGE
-                      SmartImage(
-                        _getFixedImageUrl(_products[0]['image_path']),
-                        width: double.infinity,
-                        height: 180,
-                        borderRadius: 14,
-                      ),
-
-                      Positioned(
-                        top: 10,
-                        left: 10,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFF7F11),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Text(
-                            "Trending",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Stack(
+                      children: [
+                        SmartImage(
+                          _getFixedImageUrl(_products[0]['image_path']),
+                          width: double.infinity,
+                          height: 200,
+                          borderRadius: 20,
+                        ),
+                        Positioned(
+                          top: 15,
+                          left: 15,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: actionOrange,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Text(
+                              "TRENDING",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 11,
+                                letterSpacing: 1,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [Colors.black87, Colors.transparent],
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(15),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [
+                                  Colors.black.withOpacity(0.8),
+                                  Colors.transparent,
+                                ],
+                              ),
+                              borderRadius: const BorderRadius.vertical(
+                                bottom: Radius.circular(20),
+                              ),
                             ),
-                            borderRadius: const BorderRadius.vertical(
-                              bottom: Radius.circular(14),
-                            ),
-                          ),
-                          child: Text(
-                            _products[0]['name'],
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                            child: Text(
+                              _products[0]['name'],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
         ],
@@ -392,35 +422,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildProductGrid() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 28, 16, 0),
+      padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Products",
+          Text(
+            "New Arrivals",
             style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: primaryDark,
             ),
           ),
-          const SizedBox(height: 12),
-
+          const SizedBox(height: 15),
           _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(color: Colors.white),
-                )
+              ? Center(child: CircularProgressIndicator(color: actionOrange))
               : AnimationLimiter(
-                  // ADDS SMOOTH ANIMATION
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          childAspectRatio: 0.70, // Taller cards
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.72,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15,
                         ),
                     itemCount: _products.length,
                     itemBuilder: (context, index) {
@@ -434,7 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       return AnimationConfiguration.staggeredGrid(
                         position: index,
-                        duration: const Duration(milliseconds: 375),
+                        duration: const Duration(milliseconds: 400),
                         columnCount: 2,
                         child: ScaleAnimation(
                           child: FadeInAnimation(
@@ -442,35 +468,39 @@ class _HomeScreenState extends State<HomeScreen> {
                               onTap: () => _openDetail(product),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.white10,
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.04),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // IMAGE
                                     Stack(
                                       children: [
-                                        // OPTIMIZED IMAGE
                                         SmartImage(
                                           imageUrl,
                                           height: 140,
                                           width: double.infinity,
-                                          borderRadius: 12,
+                                          borderRadius: 18,
                                           fit: BoxFit.cover,
                                         ),
-
                                         Positioned(
-                                          top: 8,
-                                          right: 8,
+                                          top: 10,
+                                          right: 10,
                                           child: GestureDetector(
                                             onTap: () => _toggleFavorite(
                                               product['product_id'].toString(),
                                             ),
                                             child: Container(
                                               padding: const EdgeInsets.all(6),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black45,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Icon(
@@ -479,17 +509,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     : Icons.favorite_border,
                                                 color: isFav
                                                     ? Colors.red
-                                                    : Colors.white,
-                                                size: 16,
+                                                    : primaryDark,
+                                                size: 18,
                                               ),
                                             ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    // TEXT
                                     Padding(
-                                      padding: const EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(12),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -498,38 +527,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                             product['name'],
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 13,
+                                            style: TextStyle(
+                                              color: primaryDark,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          const SizedBox(height: 4),
+                                          const SizedBox(height: 5),
                                           Text(
                                             "Rs. ${product['price']}",
-                                            style: const TextStyle(
-                                              color: Colors.orange,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
+                                            style: TextStyle(
+                                              color: actionOrange,
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w800,
                                             ),
-                                          ),
-                                          const SizedBox(height: 6),
-                                          const Row(
-                                            children: [
-                                              Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                                size: 12,
-                                              ),
-                                              SizedBox(width: 4),
-                                              Text(
-                                                "4.8",
-                                                style: TextStyle(
-                                                  color: Colors.white70,
-                                                  fontSize: 11,
-                                                ),
-                                              ),
-                                            ],
                                           ),
                                         ],
                                       ),
@@ -571,29 +582,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildBottomNav() {
     return Container(
-      height: 70,
-      color: const Color(0xFF3B281D),
+      height: 80,
+      decoration: BoxDecoration(
+        color: primaryDark,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(Icons.home, "Home", Colors.white, () {}),
+          _navItem(Icons.home_rounded, "Home", Colors.white, true, () {}),
           if (!isSeller)
             _navItem(
-              Icons.shopping_cart_outlined,
+              Icons.shopping_bag_outlined,
               "Cart",
-              Colors.white70,
+              Colors.white60,
+              false,
               () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (c) => const CartScreen()),
               ),
             ),
+
           if (isSeller) ...[
             _navItem(
-              Icons.storefront,
+              Icons.storefront_rounded,
               "Shop",
-              Colors.white70,
+              Colors.white60,
+              false,
               () => Navigator.pushNamed(context, '/shop'),
             ),
+
             GestureDetector(
               onTap: () async {
                 await Navigator.push(
@@ -602,37 +623,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
                 _fetchProducts();
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF7F11),
-                      borderRadius: BorderRadius.circular(22),
+              child: Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: actionOrange,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: actionOrange.withOpacity(0.4),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
-                    child: const Icon(Icons.add, color: Colors.black, size: 26),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "Add",
-                    style: TextStyle(color: Colors.white70, fontSize: 10),
-                  ),
-                ],
+                  ],
+                ),
+                child: const Icon(Icons.add, color: Colors.white, size: 28),
               ),
             ),
           ],
+
           _navItem(
-            Icons.favorite_border,
+            Icons.favorite_outline_rounded,
             "Favorites",
-            Colors.white70,
+            Colors.white60,
+            false,
             () => Navigator.pushNamed(context, '/favorites'),
           ),
+
           _navItem(
-            Icons.person_outline,
+            Icons.person_outline_rounded,
             "Profile",
-            Colors.white70,
+            Colors.white60,
+            false,
             () => Navigator.pushNamed(context, '/profile'),
           ),
         ],
@@ -644,6 +666,7 @@ class _HomeScreenState extends State<HomeScreen> {
     IconData icon,
     String label,
     Color color,
+    bool isActive,
     VoidCallback onTap,
   ) {
     return GestureDetector(
@@ -651,9 +674,16 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: color, size: 26),
+          Icon(icon, color: isActive ? actionOrange : color, size: 26),
           const SizedBox(height: 4),
-          Text(label, style: TextStyle(color: color, fontSize: 10)),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.white : color,
+              fontSize: 11,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
         ],
       ),
     );
