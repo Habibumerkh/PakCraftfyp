@@ -72,176 +72,257 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Back Button
-              GestureDetector(
-                onTap: () => Navigator.pushReplacementNamed(context, '/login'),
-                child: const Icon(Icons.arrow_back, color: Color(0xFF3B281D)),
-              ),
-              const SizedBox(height: 20),
-
-              const Text(
-                "Create Account",
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF3B281D),
-                ),
-              ),
-              const Text(
-                "Sign up to get started",
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-
-              const SizedBox(height: 30),
-
-              // Inputs
-              _buildInput(
-                controller: _nameController,
-                hint: "Full Name",
-                icon: Icons.person_outline,
-              ),
-              const SizedBox(height: 15),
-              _buildInput(
-                controller: _emailController,
-                hint: "Email",
-                icon: Icons.email_outlined,
-              ),
-              const SizedBox(height: 15),
-              _buildInput(
-                controller: _phoneController,
-                hint: "Phone",
-                icon: Icons.phone_outlined,
-              ),
-              const SizedBox(height: 20),
-
-              // Role Selection
-              const Text(
-                "I want to register as:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF3B281D),
-                ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: _roleCard(
-                      "Buyer",
-                      Icons.shopping_bag_outlined,
-                      'customer',
+      backgroundColor: const Color(0xFFE0DCD3), // Beige BG
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // --- 1. CURVED HEADER (Matched to Login) ---
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height:
+                      size.height *
+                      0.30, // Slightly smaller to fit more fields below
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF3B281D), // Deep Brown
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(50),
+                      bottomRight: Radius.circular(50),
                     ),
                   ),
-                  const SizedBox(width: 15),
-                  Expanded(
-                    child: _roleCard("Seller", Icons.store_outlined, 'seller'),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 20),
-
-              // Shop Name (Animated Visibility)
-              if (_selectedRole == 'seller') ...[
-                _buildInput(
-                  controller: _shopNameController,
-                  hint: "Shop Name",
-                  icon: Icons.store,
                 ),
-                const SizedBox(height: 15),
-              ],
-
-              _buildInput(
-                controller: _passwordController,
-                hint: "Password",
-                icon: Icons.lock_outline,
-                isPassword: true,
-                isVis: _isPasswordVisible,
-                toggle: () =>
-                    setState(() => _isPasswordVisible = !_isPasswordVisible),
-              ),
-              const SizedBox(height: 15),
-              _buildInput(
-                controller: _confirmPasswordController,
-                hint: "Confirm Password",
-                icon: Icons.lock_outline,
-                isPassword: true,
-                isVis: _isConfirmPasswordVisible,
-                toggle: () => setState(
-                  () => _isConfirmPasswordVisible = !_isConfirmPasswordVisible,
-                ),
-              ),
-
-              const SizedBox(height: 30),
-
-              // Sign Up Button
-              SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _apiSignup,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(
-                      0xFFFF7F11,
-                    ), // Orange for Action
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    elevation: 5,
-                  ),
-                  child: _isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text(
-                          "SIGN UP",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Login Link
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Already have an account? ",
-                    style: TextStyle(color: Color(0xFF3B281D)),
-                  ),
-                  GestureDetector(
+                // Back Button
+                Positioned(
+                  top: 50,
+                  left: 20,
+                  child: GestureDetector(
                     onTap: () =>
                         Navigator.pushReplacementNamed(context, '/login'),
-                    child: const Text(
-                      "Login",
-                      style: TextStyle(
-                        color: Color(0xFFFF7F11),
-                        fontWeight: FontWeight.bold,
+                    child: const Icon(Icons.arrow_back, color: Colors.white),
+                  ),
+                ),
+                Positioned(
+                  bottom: 30,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const CircleAvatar(
+                          radius: 40,
+                          backgroundImage: AssetImage('assets/logo.png'),
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Text(
+                        "CREATE ACCOUNT",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 20),
+
+            // --- 2. FLOATING REGISTRATION CARD ---
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Container(
+                padding: const EdgeInsets.all(25),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Center(
+                      child: Text(
+                        "Join PakCraft",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3B281D),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    const Center(
+                      child: Text(
+                        "Register to start your journey",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    const SizedBox(height: 25),
+
+                    // Inputs
+                    _buildInput(
+                      controller: _nameController,
+                      hint: "Full Name",
+                      icon: Icons.person_outline,
+                    ),
+                    const SizedBox(height: 15),
+                    _buildInput(
+                      controller: _emailController,
+                      hint: "Email Address",
+                      icon: Icons.email_outlined,
+                    ),
+                    const SizedBox(height: 15),
+                    _buildInput(
+                      controller: _phoneController,
+                      hint: "Phone Number",
+                      icon: Icons.phone_outlined,
+                    ),
+
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Register as:",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF3B281D),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _roleCard(
+                            "Buyer",
+                            Icons.shopping_bag_outlined,
+                            'customer',
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _roleCard(
+                            "Seller",
+                            Icons.store_outlined,
+                            'seller',
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    if (_selectedRole == 'seller') ...[
+                      const SizedBox(height: 15),
+                      _buildInput(
+                        controller: _shopNameController,
+                        hint: "Shop Name",
+                        icon: Icons.store,
+                      ),
+                    ],
+
+                    const SizedBox(height: 15),
+                    _buildInput(
+                      controller: _passwordController,
+                      hint: "Password",
+                      icon: Icons.lock_outline,
+                      isPassword: true,
+                      isVis: _isPasswordVisible,
+                      toggle: () => setState(
+                        () => _isPasswordVisible = !_isPasswordVisible,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+                    _buildInput(
+                      controller: _confirmPasswordController,
+                      hint: "Confirm Password",
+                      icon: Icons.lock_outline,
+                      isPassword: true,
+                      isVis: _isConfirmPasswordVisible,
+                      toggle: () => setState(
+                        () => _isConfirmPasswordVisible =
+                            !_isConfirmPasswordVisible,
+                      ),
+                    ),
+
+                    const SizedBox(height: 30),
+
+                    // Sign Up Button
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _apiSignup,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(
+                            0xFF3B281D,
+                          ), // Dark Brown like Login
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: _isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Text(
+                                "SIGN UP",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 20),
-            ],
-          ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // --- 3. FOOTER LINK ---
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Already have an account? ",
+                  style: TextStyle(color: Color(0xFF3B281D)),
+                ),
+                GestureDetector(
+                  onTap: () =>
+                      Navigator.pushReplacementNamed(context, '/login'),
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(
+                      color: Color(0xFFFF7F11),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 40),
+          ],
         ),
       ),
     );
   }
-
-  // --- Widgets ---
 
   Widget _buildInput({
     required TextEditingController controller,
@@ -253,15 +334,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: TextField(
         controller: controller,
@@ -292,10 +366,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       onTap: () => setState(() => _selectedRole = role),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF3B281D) : Colors.white,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? Colors.transparent : Colors.grey.shade300,
           ),
@@ -314,7 +388,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Icon(
               icon,
               color: isSelected ? Colors.white : Colors.grey,
-              size: 28,
+              size: 24,
             ),
             const SizedBox(height: 5),
             Text(
@@ -322,6 +396,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               style: TextStyle(
                 color: isSelected ? Colors.white : const Color(0xFF3B281D),
                 fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
             ),
           ],

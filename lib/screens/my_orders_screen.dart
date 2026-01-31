@@ -55,6 +55,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFD6D0C9),
       appBar: AppBar(
+        centerTitle: true,
         title: const Text(
           "My Orders",
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -62,7 +63,22 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
         backgroundColor: const Color(0xFFD6D0C9),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          icon: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.08),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Icon(Icons.arrow_back, color: Colors.black, size: 22),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),

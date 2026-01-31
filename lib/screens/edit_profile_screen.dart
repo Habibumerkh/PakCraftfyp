@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -59,7 +57,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (res.statusCode == 200) {
         var data = json.decode(res.body);
         if (data['success'] == true) {
-          // IMPORTANT: Update Local User Data so the app reflects changes immediately
+          // Update Local User Data
           User updatedUser = User(
             currentUser!.user_id,
             _nameController.text,
@@ -68,7 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             _phoneController.text,
             currentUser!.role,
             isSeller ? _shopNameController.text : "",
-            currentUser!.user_image,
+            currentUser!.user_image, // Keep existing image
           );
 
           await RemUSer.saveUSer(updatedUser);
@@ -80,7 +78,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 backgroundColor: Colors.green,
               ),
             );
-            Navigator.pop(context); // Go back to Profile Screen
+            Navigator.pop(context, true); // Return true to trigger refresh
           }
         } else {
           ScaffoldMessenger.of(
@@ -99,80 +97,189 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
+    // FIX IMAGE URL for display
+    String fullImageUrl = "";
+    if (currentUser != null && currentUser!.user_image.isNotEmpty) {
+      fullImageUrl =
+          "${API.hostConnect}/${currentUser!.user_image.replaceAll('\\', '/')}";
+    }
+
     return Scaffold(
-      backgroundColor: const Color(0xFFD6D0C9), // Beige Theme
-      appBar: AppBar(
-        title: const Text(
-          "Edit Profile",
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: const Color(0xFFD6D0C9),
-        elevation: 0,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      backgroundColor: const Color(0xFFE0DCD3), // Beige Theme
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+        child: Stack(
           children: [
-            const SizedBox(height: 20),
-
-            // Avatar Placeholder
+            // --- 1. CURVED HEADER ---
             Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFFF8A00), width: 2),
-              ),
-              child: const CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 50, color: Colors.grey),
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            _buildTextField("Full Name", _nameController, Icons.person),
-            const SizedBox(height: 15),
-            _buildTextField(
-              "Phone Number",
-              _phoneController,
-              Icons.phone,
-              isNumber: true,
-            ),
-
-            if (isSeller) ...[
-              const SizedBox(height: 15),
-              _buildTextField("Shop Name", _shopNameController, Icons.store),
-            ],
-
-            const SizedBox(height: 40),
-
-            SizedBox(
+              height: size.height * 0.35,
               width: double.infinity,
-              height: 55,
-              child: ElevatedButton(
-                onPressed: _isLoading ? null : _updateProfile,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF8A00),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+              decoration: const BoxDecoration(
+                color: Color(0xFFE0DCD3), // Deep Brown
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
                 ),
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        "Save Changes",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 40,
+                    left: 20,
+                    child: IconButton(
+                      icon: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
                           color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.black,
+                          size: 22,
                         ),
                       ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                  const Positioned(
+                    top: 50,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Text(
+                        "Edit Profile",
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 44, 33, 33),
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // --- 2. FLOATING CONTENT CARD ---
+            Container(
+              margin: EdgeInsets.only(top: size.height * 0.25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 20,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        // --- PROFILE PICTURE DISPLAY ---
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color(0xFFFF7F11),
+                              width: 3,
+                            ),
+                            color: const Color(0xFFF5F5F5),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: fullImageUrl.isNotEmpty
+                                ? Image.network(
+                                    fullImageUrl,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (c, o, s) => const Icon(
+                                      Icons.person,
+                                      size: 50,
+                                      color: Colors.grey,
+                                    ),
+                                  )
+                                : const Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: Colors.grey,
+                                  ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // --- INPUT FIELDS ---
+                        _buildInput("Full Name", _nameController, Icons.person),
+                        const SizedBox(height: 15),
+                        _buildInput(
+                          "Phone Number",
+                          _phoneController,
+                          Icons.phone,
+                          isNumber: true,
+                        ),
+
+                        if (isSeller) ...[
+                          const SizedBox(height: 15),
+                          _buildInput(
+                            "Shop Name",
+                            _shopNameController,
+                            Icons.store,
+                          ),
+                        ],
+
+                        const SizedBox(height: 30),
+
+                        // --- SAVE BUTTON ---
+                        SizedBox(
+                          width: double.infinity,
+                          height: 55,
+                          child: ElevatedButton(
+                            onPressed: _isLoading ? null : _updateProfile,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(
+                                0xFFFF7F11,
+                              ), // Orange
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    "Save Changes",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -181,7 +288,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildTextField(
+  Widget _buildInput(
     String label,
     TextEditingController controller,
     IconData icon, {
@@ -189,22 +296,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
         controller: controller,
         keyboardType: isNumber ? TextInputType.phone : TextInputType.text,
+        style: const TextStyle(color: Color(0xFF3B281D)),
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: Icon(icon, color: Colors.grey),
+          labelStyle: TextStyle(color: Colors.grey[600]),
+          prefixIcon: Icon(icon, color: const Color(0xFF3B281D)),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,

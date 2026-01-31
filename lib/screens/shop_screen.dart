@@ -1,4 +1,3 @@
-
 // ignore_for_file: empty_catches
 
 import 'dart:convert';
@@ -10,8 +9,8 @@ import 'package:pakcraft/credentials/user_pref/userpref.dart';
 import 'package:pakcraft/screens/add_product_screen.dart';
 import 'package:pakcraft/screens/edit_product_screen.dart';
 import 'package:pakcraft/screens/home_screen.dart';
-import 'package:pakcraft/screens/favorites_screen.dart'; // Added for Nav
-import 'package:pakcraft/screens/profile_screen.dart'; // Added for Nav
+import 'package:pakcraft/screens/favorites_screen.dart';
+import 'package:pakcraft/screens/profile_screen.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -43,6 +42,8 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Future<void> _loadData() async {
     currentUser = await RemUSer.readUSerInfo();
+    // Refresh state to show shop name immediately after loading user
+    setState(() {});
     if (currentUser != null) {
       _fetchMyProducts();
       _fetchSellerStats();
@@ -145,14 +146,28 @@ class _ShopScreenState extends State<ShopScreen> {
       appBar: AppBar(
         backgroundColor: bgColor,
         elevation: 0,
-        automaticallyImplyLeading: false, // REMOVED BACK BUTTON
-        title: Text(
-          "My Shop",
-          style: TextStyle(
-            color: primaryDark,
-            fontWeight: FontWeight.w900,
-            fontSize: 22,
-          ),
+        automaticallyImplyLeading: false,
+        // --- MODIFIED TITLE TO SHOW SHOP NAME ---
+        title: Column(
+          children: [
+            Text(
+              "My Shop",
+              style: TextStyle(
+                color: primaryDark,
+                fontWeight: FontWeight.w900,
+                fontSize: 22,
+              ),
+            ),
+            if (currentUser != null && currentUser!.shop_name.isNotEmpty)
+              Text(
+                currentUser!.shop_name, // Real Shop Name from DB
+                style: TextStyle(
+                  color: primaryDark.withOpacity(0.6),
+                  fontWeight: FontWeight.normal,
+                  fontSize: 14,
+                ),
+              ),
+          ],
         ),
         centerTitle: true,
         actions: [

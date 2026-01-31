@@ -2,7 +2,7 @@ class API {
   // -------------------------------------------------------------
   // 1. BASE URL (Check your IP via ipconfig if it fails)
   // -------------------------------------------------------------
-  static const hostConnect = "http://192.168.100.175/connection";
+  static const hostConnect = "http://192.168.100.7/connection";
 
   // -------------------------------------------------------------
   // 2. AUTHENTICATION (Files are directly in 'connection' folder)
