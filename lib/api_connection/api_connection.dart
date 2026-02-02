@@ -1,27 +1,14 @@
 class API {
-  // -------------------------------------------------------------
-  // 1. BASE URL (Check your IP via ipconfig if it fails)
-  // -------------------------------------------------------------
-  static const hostConnect = "http://192.168.100.7/connection";
+  static const hostConnect = "http://192.168.100.175/connection";
 
-  // -------------------------------------------------------------
-  // 2. AUTHENTICATION (Files are directly in 'connection' folder)
-  // -------------------------------------------------------------
   static const signup = "$hostConnect/signup.php";
   static const login = "$hostConnect/login.php";
   static const searchProduct = "$hostConnect/search_product.php";
   static const getSellerProducts = "$hostConnect/get_seller_products.php";
   static const editProduct = "$hostConnect/edit_product.php";
   static const getMyOrders = "$hostConnect/get_my_orders.php";
-  // Forgot Password / OTP
-  static const validateEmail =
-      "$hostConnect/send_otp.php"; // Linked to PHPMailer
-  static const resetPassword =
-      "$hostConnect/reset_password.php"; // Linked to DB Update
-
-  // -------------------------------------------------------------
-  // 3. ADMIN PANEL
-  // -------------------------------------------------------------
+  static const validateEmail = "$hostConnect/send_otp.php";
+  static const resetPassword = "$hostConnect/reset_password.php";
 
   static const deleteProduct = "$hostConnect/admin/delete_product.php";
   static const getAdminStats = "$hostConnect/admin/get_stats.php";
@@ -32,10 +19,6 @@ class API {
   static const getAllOrdersAdmin = "$hostConnect/admin/get_all_orders.php";
   static const uploadProfilePic = "$hostConnect/upload_profile_pic.php";
   static const updateProfile = "$hostConnect/update_profile.php";
-
-  // -------------------------------------------------------------
-  // 4. PRODUCTS
-  // -------------------------------------------------------------
   static const addProduct = "$hostConnect/add_product.php";
   static const getSellerStats = "$hostConnect/get_seller_stats.php";
   static const getByCategory = "$hostConnect/get_by_category.php";
@@ -47,5 +30,4 @@ class API {
   static const placeOrder = "$hostConnect/place_order.php";
   static const toggleFavorite = "$hostConnect/toggle_favorite.php";
   static const getFavorite = "$hostConnect/get_favorite.php";
-  // static const getOrders = "$hostConnect/get_orders.php";
 }

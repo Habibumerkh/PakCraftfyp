@@ -45,13 +45,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void initState() {
     super.initState();
-    // 1. PRE-FILL DATA
+
     _nameController.text = widget.product['name'];
     _descController.text = widget.product['description'];
     _priceController.text = widget.product['price'].toString();
     _stockController.text = widget.product['stock_quantity'].toString();
 
-    // 2. SET CATEGORY CORRECTLY
     String dbCategory = widget.product['category'] ?? "Pottery";
     if (_categories.contains(dbCategory)) {
       _selectedCategory = dbCategory;
@@ -99,7 +98,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       appBar: AppBar(
         backgroundColor: bgColor,
         elevation: 0,
-        // --- ADDED BACK BUTTON ---
+
         leading: IconButton(
           icon: Container(
             width: 40,
@@ -121,7 +120,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           ),
         ),
         centerTitle: true,
-        // --- REPLACED HOME WITH SHOP ICON ---
+
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 12),
