@@ -20,16 +20,13 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
-  // Data Variables
   List _products = [];
   bool _isLoading = true;
   User? currentUser;
 
-  // Stats Variables
   String totalSales = "0";
   String totalOrders = "0";
 
-  // Theme Colors
   final Color bgColor = const Color(0xFFE0DCD3);
   final Color primaryDark = const Color(0xFF3B281D);
   final Color actionOrange = const Color(0xFFFF7F11);
@@ -42,7 +39,6 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Future<void> _loadData() async {
     currentUser = await RemUSer.readUSerInfo();
-    // Refresh state to show shop name immediately after loading user
     setState(() {});
     if (currentUser != null) {
       _fetchMyProducts();
@@ -147,7 +143,6 @@ class _ShopScreenState extends State<ShopScreen> {
         backgroundColor: bgColor,
         elevation: 0,
         automaticallyImplyLeading: false,
-        // --- MODIFIED TITLE TO SHOW SHOP NAME ---
         title: Column(
           children: [
             Text(
@@ -160,7 +155,7 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
             if (currentUser != null && currentUser!.shop_name.isNotEmpty)
               Text(
-                currentUser!.shop_name, // Real Shop Name from DB
+                currentUser!.shop_name,
                 style: TextStyle(
                   color: primaryDark.withOpacity(0.6),
                   fontWeight: FontWeight.normal,
@@ -204,7 +199,6 @@ class _ShopScreenState extends State<ShopScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // --- STATS CARDS ---
                   Row(
                     children: [
                       _buildStatCard("Products", "${_products.length}"),
@@ -409,7 +403,7 @@ class _ShopScreenState extends State<ShopScreen> {
             Colors.white,
             true,
             () {},
-          ), // ACTIVE
+          ), 
 
           GestureDetector(
             onTap: () async {

@@ -91,7 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- 1. CURVED HEADER ---
             Stack(
               alignment: Alignment.center,
               children: [
@@ -139,8 +138,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             const SizedBox(height: 30),
-
-            // --- 2. FLOATING FORM CARD ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Container(
@@ -172,8 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(color: Colors.grey),
                     ),
                     const SizedBox(height: 30),
-
-                    // Inputs
                     _buildInputField(
                       controller: _emailController,
                       hint: "Email Address",
@@ -206,8 +201,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 25),
-
-                    // Login Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -240,8 +233,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             const SizedBox(height: 30),
-
-            // --- 3. FOOTER LINK ---
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -279,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFFF5F5F5), // Light Grey
+        color: const Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(

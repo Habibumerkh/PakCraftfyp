@@ -8,19 +8,19 @@ class VerificationSuccessScreen extends StatefulWidget {
   const VerificationSuccessScreen({super.key, this.email});
 
   @override
-  State<VerificationSuccessScreen> createState() => _VerificationSuccessScreenState();
+  State<VerificationSuccessScreen> createState() =>
+      _VerificationSuccessScreenState();
 }
 
 class _VerificationSuccessScreenState extends State<VerificationSuccessScreen> {
   @override
   void initState() {
     super.initState();
-    // show animation briefly then go to Home (replace all)
     Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const HomeScreen()),
-            (route) => false,
+        (route) => false,
       );
     });
   }
@@ -36,9 +36,19 @@ class _VerificationSuccessScreenState extends State<VerificationSuccessScreen> {
           children: const [
             Icon(Icons.check_circle_outline, size: 96, color: Colors.white),
             SizedBox(height: 16),
-            Text("Verification Complete", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              "Verification Complete",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SizedBox(height: 8),
-            Text("Redirecting to Home...", style: TextStyle(color: Colors.white70)),
+            Text(
+              "Redirecting to Home...",
+              style: TextStyle(color: Colors.white70),
+            ),
           ],
         ),
       ),

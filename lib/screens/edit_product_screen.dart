@@ -16,18 +16,16 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
-  // Theme Colors
+ 
   final Color bgColor = const Color(0xFFE0DCD3);
   final Color primaryDark = const Color(0xFF3B281D);
   final Color actionOrange = const Color(0xFFFF7F11);
-
-  // Controllers
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   final _priceController = TextEditingController();
   final _stockController = TextEditingController();
 
-  // Dropdown Logic
+  
   late String _selectedCategory;
   final List<String> _categories = [
     "Pottery",

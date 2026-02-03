@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, empty_catches
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -22,7 +22,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool isAdding = false;
   bool isFavorite = false;
 
-  // --- BACKEND LOGIC: ADD TO CART ---
   Future<void> _addToCart() async {
     setState(() => isAdding = true);
 
@@ -71,7 +70,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
-  // --- TOGGLE FAVORITE ---
   void _toggleFavorite() async {
     User? user = await RemUSer.readUSerInfo();
     if (user == null) return;
@@ -87,51 +85,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           "product_id": productId.toString(),
         },
       );
-    } catch (e) {
-      // Error handling
-    }
+    } catch (e) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    // 1. DATA MAPPING
     String name = widget.product['name'] ?? "Unknown";
     String price = widget.product['price'].toString();
     String description =
         widget.product['description'] ?? "No description available.";
     String category = widget.product['category'] ?? "General";
 
-    // REAL SELLER NAME (From DB)
     String sellerName = widget.product['shop_name'] ?? "Unknown Shop";
 
-    // Image Fix
     String imagePath = widget.product['image'] != null
         ? widget.product['image'].toString().replaceAll('\\', '/')
         : widget.product['image_path'].toString().replaceAll('\\', '/');
 
-    // If not full URL, prepend host
     if (!imagePath.startsWith('http') && !imagePath.startsWith('assets')) {
       imagePath = "${API.hostConnect}/$imagePath";
     }
 
     bool isNetworkImage = imagePath.startsWith('http');
 
-    // Dummy Data for missing columns
     String rating = "4.5";
     String reviews = "12";
     String material = "Mixed Material";
     String dimensions = "Standard";
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // YOUR BEIGE THEME
-
+      backgroundColor: const Color(0xFFE0DCD3),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- TOP BAR ---
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15,
@@ -159,7 +148,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
 
-                    // FAVORITE BUTTON
                     GestureDetector(
                       onTap: _toggleFavorite,
                       child: Container(
@@ -181,7 +169,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
               const SizedBox(height: 10),
 
-              // --- PRODUCT IMAGE ---
               Center(
                 child: Container(
                   height: 280,
@@ -221,7 +208,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
               const SizedBox(height: 25),
 
-              // --- TITLE & PRICE ---
               Center(
                 child: Column(
                   children: [
@@ -252,7 +238,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
               const SizedBox(height: 15),
 
-              // --- CATEGORY & RATING ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -297,7 +282,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
               const SizedBox(height: 20),
 
-              // --- DESCRIPTION ---
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Text(
@@ -313,7 +297,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
               const SizedBox(height: 25),
 
-              // --- PRODUCT DETAILS CARD ---
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Container(
@@ -335,7 +318,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       const SizedBox(height: 15),
                       _detailRow("Material", material),
-                      _detailRow("Seller", sellerName), // Shows Real Shop Name
+                      _detailRow("Seller", sellerName),
                       _detailRow("Dimensions", dimensions),
                     ],
                   ),
@@ -344,7 +327,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
               const SizedBox(height: 20),
 
-              // --- QUANTITY ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -387,7 +369,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
               const SizedBox(height: 30),
 
-              // --- BUTTONS ---
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Column(

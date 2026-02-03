@@ -8,7 +8,7 @@ class User {
   String user_phone;
   String role;
   String shop_name;
-  String user_image; // <--- NEW FIELD
+  String user_image; 
 
   User(
     this.user_id,
@@ -18,7 +18,7 @@ class User {
     this.user_phone,
     this.role,
     this.shop_name,
-    this.user_image, // <--- Add to constructor
+    this.user_image, 
   );
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -29,7 +29,7 @@ class User {
     json['user_phone'],
     json['role'] ?? 'customer',
     json['shop_name'] ?? '',
-    json['user_image'] ?? '', // <--- Read from JSON (default empty)
+    json['user_image'] ?? '', 
   );
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +40,6 @@ class User {
     'user_phone': user_phone,
     'role': role,
     'shop_name': shop_name,
-    'user_image': user_image, // <--- Save to JSON
+    'user_image': user_image, 
   };
 }

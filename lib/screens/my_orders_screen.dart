@@ -1,12 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pakcraft/api_connection/api_connection.dart';
 import 'package:pakcraft/api_connection/model/user.dart';
 import 'package:pakcraft/credentials/user_pref/userpref.dart';
-import 'package:pakcraft/screens/order_detail_screen.dart'; // IMPORT THIS
+import 'package:pakcraft/screens/order_detail_screen.dart'; 
 
 class MyOrdersScreen extends StatefulWidget {
   const MyOrdersScreen({super.key});
@@ -109,8 +108,6 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
               itemCount: _orders.length,
               itemBuilder: (context, index) {
                 var order = _orders[index];
-
-                // WRAP WITH GESTURE DETECTOR TO NAVIGATE
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(

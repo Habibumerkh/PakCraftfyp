@@ -78,7 +78,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 backgroundColor: Colors.green,
               ),
             );
-            Navigator.pop(context, true); // Return true to trigger refresh
+            Navigator.pop(context, true);
           }
         } else {
           ScaffoldMessenger.of(
@@ -99,7 +99,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    // FIX IMAGE URL for display
     String fullImageUrl = "";
     if (currentUser != null && currentUser!.user_image.isNotEmpty) {
       fullImageUrl =
@@ -107,16 +106,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige Theme
+      backgroundColor: const Color(0xFFE0DCD3),
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            // --- 1. CURVED HEADER ---
             Container(
               height: size.height * 0.35,
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Color(0xFFE0DCD3), // Deep Brown
+                color: Color(0xFFE0DCD3),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
@@ -171,7 +169,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
 
-            // --- 2. FLOATING CONTENT CARD ---
             Container(
               margin: EdgeInsets.only(top: size.height * 0.25),
               padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -192,7 +189,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     child: Column(
                       children: [
-                        // --- PROFILE PICTURE DISPLAY ---
                         Container(
                           width: 100,
                           height: 100,
@@ -226,7 +222,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                         const SizedBox(height: 30),
 
-                        // --- INPUT FIELDS ---
                         _buildInput("Full Name", _nameController, Icons.person),
                         const SizedBox(height: 15),
                         _buildInput(
@@ -247,16 +242,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                         const SizedBox(height: 30),
 
-                        // --- SAVE BUTTON ---
                         SizedBox(
                           width: double.infinity,
                           height: 55,
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _updateProfile,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(
-                                0xFFFF7F11,
-                              ), // Orange
+                              backgroundColor: const Color(0xFFFF7F11),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),

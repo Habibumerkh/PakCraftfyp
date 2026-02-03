@@ -16,7 +16,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   void initState() {
     super.initState();
-    // Initialize Animation
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -32,7 +31,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
-    // Start Animation
     _controller.forward();
   }
 
@@ -47,10 +45,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige Background
+      backgroundColor: const Color(0xFFE0DCD3),
       body: Stack(
         children: [
-          // --- 1. CURVED BACKGROUND SHAPE ---
           Positioned(
             top: 0,
             left: 0,
@@ -58,7 +55,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             height: size.height * 0.55,
             child: Container(
               decoration: const BoxDecoration(
-                color: Color(0xFF3B281D), // Deep Brown
+                color: Color(0xFF3B281D),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(60),
                   bottomRight: Radius.circular(60),
@@ -66,7 +63,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               ),
               child: Stack(
                 children: [
-                  // Decorative Circle (Faint)
                   Positioned(
                     top: -50,
                     right: -50,
@@ -84,13 +80,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             ),
           ),
 
-          // --- 2. CONTENT ---
           SafeArea(
             child: Column(
               children: [
                 const SizedBox(height: 60),
 
-                // --- ANIMATED LOGO ---
                 FadeTransition(
                   opacity: _fadeAnimation,
                   child: Center(
@@ -118,7 +112,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                 const SizedBox(height: 30),
 
-                // --- ANIMATED TEXT ---
                 SlideTransition(
                   position: _slideAnimation,
                   child: Column(
@@ -157,7 +150,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                 const Spacer(),
 
-                // --- ANIMATED BUTTONS ---
                 SlideTransition(
                   position: _slideAnimation,
                   child: Padding(
@@ -167,7 +159,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     ),
                     child: Column(
                       children: [
-                        // SIGN UP BUTTON (Primary - Orange)
                         SizedBox(
                           width: double.infinity,
                           height: 60,
@@ -175,9 +166,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             onPressed: () =>
                                 Navigator.pushNamed(context, '/signup'),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(
-                                0xFFFF7F11,
-                              ), // Orange
+                              backgroundColor: const Color(0xFFFF7F11),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -209,7 +198,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
                         const SizedBox(height: 20),
 
-                        // LOGIN BUTTON (Secondary - Outline/Brown)
                         SizedBox(
                           width: double.infinity,
                           height: 60,

@@ -63,12 +63,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            // --- 1. CURVED DARK HEADER ---
             Container(
               height: size.height * 0.35,
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Color(0xFF3B281D), // Deep Brown
+                color: Color(0xFF3B281D),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
@@ -76,7 +75,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               child: Stack(
                 children: [
-                  // Back Button (White on Dark)
                   Positioned(
                     top: 50,
                     left: 20,
@@ -88,7 +86,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
-                  // Header Title
                   const Positioned(
                     top: 100,
                     left: 0,
@@ -109,7 +106,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
 
-            // --- 2. FLOATING CONTENT CARD ---
             Container(
               margin: EdgeInsets.only(top: size.height * 0.25),
               padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -131,7 +127,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                     child: Column(
                       children: [
-                        // Icon Circle
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -168,8 +163,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
 
                         const SizedBox(height: 35),
-
-                        // Input Field
                         Container(
                           decoration: BoxDecoration(
                             color: const Color(0xFFF5F5F5),
@@ -194,17 +187,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
 
                         const SizedBox(height: 30),
-
-                        // Send Button
                         SizedBox(
                           width: double.infinity,
                           height: 55,
                           child: ElevatedButton(
                             onPressed: _isLoading ? null : _sendOtp,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(
-                                0xFFFF7F11,
-                              ), // Orange
+                              backgroundColor: const Color(0xFFFF7F11),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -229,8 +218,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
 
                   const SizedBox(height: 30),
-
-                  // Footer
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: const Row(

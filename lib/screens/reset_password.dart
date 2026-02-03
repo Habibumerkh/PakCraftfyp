@@ -69,16 +69,15 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige Background
+      backgroundColor: const Color(0xFFE0DCD3),
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            // -------- HEADER --------
             Container(
               height: size.height * 0.35,
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Color(0xFF3B281D), // Brown
+                color: Color(0xFF3B281D),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
@@ -86,7 +85,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               ),
               child: Stack(
                 children: [
-                  // Back Button
                   Positioned(
                     top: 50,
                     left: 20,
@@ -99,7 +97,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                   ),
 
-                  // Title
                   const Positioned(
                     top: 100,
                     left: 0,
@@ -120,7 +117,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               ),
             ),
 
-            // -------- CARD --------
             Container(
               margin: EdgeInsets.only(top: size.height * 0.25),
               padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -142,7 +138,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     child: Column(
                       children: [
-                        // Icon
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -182,7 +177,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                         const SizedBox(height: 35),
 
-                        // New Password
                         _inputField(
                           controller: _passController,
                           hint: "New Password",
@@ -191,7 +185,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                         const SizedBox(height: 20),
 
-                        // Confirm Password
                         _inputField(
                           controller: _confirmPassController,
                           hint: "Confirm Password",
@@ -200,7 +193,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                         const SizedBox(height: 30),
 
-                        // Button
                         SizedBox(
                           width: double.infinity,
                           height: 55,
@@ -241,7 +233,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     );
   }
 
-  // -------- INPUT FIELD --------
   Widget _inputField({
     required TextEditingController controller,
     required String hint,

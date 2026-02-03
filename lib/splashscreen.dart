@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pakcraft/api_connection/model/user.dart';
@@ -21,21 +20,13 @@ class _SplashScreenState extends State<SplashScreen> {
     _checkLoginStatus();
   }
 
-  // --- LOGIC TO CHECK IF LOGGED IN ---
   Future<void> _checkLoginStatus() async {
-    // 1. Keep the splash visible for 3 seconds
     await Future.delayed(const Duration(seconds: 3));
-
-    // 2. Check if User Info exists
     User? userInfo = await RemUSer.readUSerInfo();
-
     if (!mounted) return;
-
     if (userInfo == null) {
-      // Not Logged In -> Go to Welcome Screen
       Navigator.pushReplacementNamed(context, '/welcome');
     } else {
-      // Logged In -> Redirect based on Role
       if (userInfo.role == 'admin') {
         Navigator.pushReplacement(
           context,
@@ -53,10 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige Theme Background
+      backgroundColor: const Color(0xFFE0DCD3),
       body: Stack(
         children: [
-          // Optional: Subtle Background Decoration
           Positioned(
             top: -50,
             left: -50,
@@ -64,20 +54,15 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 200,
               height: 200,
               decoration: BoxDecoration(
-                color: const Color(
-                  0xFFFF7F11,
-                ).withOpacity(0.05), // Faint Orange
+                color: const Color(0xFFFF7F11).withOpacity(0.05),
                 shape: BoxShape.circle,
               ),
             ),
           ),
-
-          // --- CENTER CONTENT ---
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // 1. Logo Container
                 Container(
                   width: 140,
                   height: 140,
@@ -99,12 +84,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
 
                 const SizedBox(height: 30),
-
-                // 2. App Name
                 const Text(
                   "PAKCRAFT",
                   style: TextStyle(
-                    color: Color(0xFF3B281D), // Deep Brown
+                    color: Color(0xFF3B281D),
                     fontSize: 36,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 4,
@@ -112,8 +95,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
 
                 const SizedBox(height: 10),
-
-                // 3. Intro Text / Slogan
                 Text(
                   "Connecting Artisans to the World",
                   style: TextStyle(
@@ -131,21 +112,18 @@ class _SplashScreenState extends State<SplashScreen> {
               ],
             ),
           ),
-
-          // 4. Bottom Loading Indicator
           const Positioned(
             bottom: 60,
             left: 0,
             right: 0,
             child: Center(
               child: CircularProgressIndicator(
-                color: Color(0xFFFF7F11), // Orange Accent
+                color: Color(0xFFFF7F11),
                 strokeWidth: 3,
               ),
             ),
           ),
 
-          // 5. Version Number (Optional Polish)
           const Positioned(
             bottom: 20,
             left: 0,

@@ -44,7 +44,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige Theme
+      backgroundColor: const Color(0xFFE0DCD3),
       appBar: AppBar(
         backgroundColor: const Color(0xFFE0DCD3),
         elevation: 0,
@@ -60,7 +60,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           child: TextField(
             controller: _searchController,
-            onChanged: _searchProduct, // Search as you type
+            onChanged: _searchProduct,
             autofocus: true,
             decoration: const InputDecoration(
               hintText: "Search for vases, textile...",
@@ -91,7 +91,6 @@ class _SearchScreenState extends State<SearchScreen> {
               itemCount: _results.length,
               itemBuilder: (context, index) {
                 var product = _results[index];
-                // Fix Image URL
                 String imagePath = product['image_path'].toString().replaceAll(
                   '\\',
                   '/',

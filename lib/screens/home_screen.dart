@@ -1,5 +1,4 @@
 // ignore_for_file: empty_catches
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -27,8 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List _products = [];
   List<String> _favoriteIds = [];
   bool _isLoading = true;
-
-  // Theme Colors based on reference screens
   final Color bgColor = const Color(0xFFE0DCD3); // Beige
   final Color primaryDark = const Color(0xFF3B281D); // Deep Brown
   final Color actionOrange = const Color(0xFFFF7F11); // Orange

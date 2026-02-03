@@ -13,6 +13,7 @@ analyzer:
     curly_braces_in_flow_control_structures: ignore
     deprecated_member_use: ignore
     duplicate_ignore: ignore
+    empty_catches: ignore
     unused_element: ignore
     unused_field: ignore
     unused_import: ignore

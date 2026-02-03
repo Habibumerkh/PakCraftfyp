@@ -27,7 +27,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     _fetchStats();
   }
 
-  // REFRESH FUNCTION
   Future<void> _fetchStats() async {
     setState(() => isLoading = true);
     try {
@@ -52,7 +51,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Scaffold(
       body: Stack(
         children: [
-          // PREMIUM BACKGROUND
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -69,7 +67,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // HEADER WITH REFRESH BUTTON
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -95,7 +92,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                           ),
                         ],
                       ),
-                      // REFRESH BUTTON
+
                       IconButton(
                         onPressed: _fetchStats,
                         icon: isLoading
@@ -120,7 +117,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
                   const SizedBox(height: 30),
 
-                  // STATS CARDS
+                  
                   Row(
                     children: [
                       _statCard("Users", totalUsers, Icons.people, Colors.blue),
@@ -152,8 +149,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     ),
                   ),
                   const SizedBox(height: 15),
-
-                  // NAVIGATION MENU
                   _navTile(
                     "Manage Users",
                     "View & Ban Accounts",
@@ -194,8 +189,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   ),
 
                   const SizedBox(height: 20),
-
-                  // LOGOUT
                   SizedBox(
                     width: double.infinity,
                     height: 55,

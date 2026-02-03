@@ -24,7 +24,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
   List _products = [];
   bool _isLoading = true;
 
-  // Theme Colors
   final Color bgColor = const Color(0xFFE0DCD3);
   final Color primaryDark = const Color(0xFF3B281D);
   final Color actionOrange = const Color(0xFFFF7F11);
@@ -60,7 +59,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // --- CUSTOM HEADER WITH BACK BUTTON ---
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
               child: Row(
@@ -83,7 +81,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     ),
                   ),
                   const SizedBox(width: 15),
-                  // CATEGORY ICON
                   Container(
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
@@ -104,7 +101,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  // CATEGORY TITLE
                   Text(
                     widget.categoryName,
                     style: TextStyle(

@@ -11,7 +11,6 @@ import 'screens/shop_screen.dart';
 import 'screens/add_product_screen.dart';
 import 'screens/favorites_screen.dart';
 import 'screens/settings_screen.dart';
-//import 'screens/edit_profile_screen.dart';
 import 'screens/my_orders_screen.dart';
 import 'screens/category_screen.dart';
 import 'package:pakcraft/admin/admin_dashboard.dart';
@@ -46,7 +45,6 @@ class PakCraftApp extends StatelessWidget {
         '/add': (context) => const AddProductScreen(),
         '/favorites': (context) => const FavoritesScreen(),
         '/settings': (context) => const SettingsScreen(),
-        //'/edit_profile': (context) => const EditProfileScreen(),
         '/my_orders': (context) => const MyOrdersScreen(),
         '/category': (context) =>
             const CategoryScreen(categoryName: '', categoryIcon: ''),

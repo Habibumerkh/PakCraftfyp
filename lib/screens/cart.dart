@@ -102,7 +102,6 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         backgroundColor: bgColor,
         elevation: 0,
-        // Seller sees back button, Buyer doesn't
         automaticallyImplyLeading: isSeller,
         leading: isSeller
             ? IconButton(
@@ -120,7 +119,6 @@ class _CartScreenState extends State<CartScreen> {
         ),
         centerTitle: true,
         actions: [
-          // Home button only for Buyers (since they have no back button)
           if (!isSeller)
             Container(
               margin: const EdgeInsets.only(right: 12),

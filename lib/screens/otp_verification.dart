@@ -38,16 +38,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige Background
+      backgroundColor: const Color(0xFFE0DCD3),
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            // --- 1. CURVED HEADER ---
             Container(
               height: size.height * 0.35,
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Color(0xFF3B281D), // Deep Brown
+                color: Color(0xFF3B281D),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
@@ -55,7 +54,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               ),
               child: Stack(
                 children: [
-                  // Back Button
                   Positioned(
                     top: 50,
                     left: 20,
@@ -67,7 +65,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
-                  // Title
+
                   const Positioned(
                     top: 100,
                     left: 0,
@@ -87,8 +85,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 ],
               ),
             ),
-
-            // --- 2. FLOATING CONTENT CARD ---
             Container(
               margin: EdgeInsets.only(top: size.height * 0.25),
               padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -110,7 +106,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                     child: Column(
                       children: [
-                        // Icon Circle
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -147,8 +142,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         ),
 
                         const SizedBox(height: 35),
-
-                        // OTP Input Field
                         Container(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           decoration: BoxDecoration(
@@ -165,7 +158,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF3B281D),
-                              letterSpacing: 15, // Spaced out digits
+                              letterSpacing: 15,
                             ),
                             decoration: const InputDecoration(
                               counterText: "",
@@ -181,16 +174,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
                         const SizedBox(height: 30),
 
-                        // Verify Button
                         SizedBox(
                           width: double.infinity,
                           height: 55,
                           child: ElevatedButton(
                             onPressed: _verify,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(
-                                0xFFFF7F11,
-                              ), // Orange
+                              backgroundColor: const Color(0xFFFF7F11),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
@@ -211,8 +201,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   ),
 
                   const SizedBox(height: 20),
-
-                  // Resend Text
                   TextButton(
                     onPressed: () {
                       Fluttertoast.showToast(msg: "Code resent!");

@@ -75,28 +75,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFE0DCD3), // Beige BG
+      backgroundColor: const Color(0xFFE0DCD3),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // --- 1. CURVED HEADER (Matched to Login) ---
             Stack(
               alignment: Alignment.center,
               children: [
                 Container(
-                  height:
-                      size.height *
-                      0.30, // Slightly smaller to fit more fields below
+                  height: size.height * 0.30,
                   width: double.infinity,
                   decoration: const BoxDecoration(
-                    color: Color(0xFF3B281D), // Deep Brown
+                    color: Color(0xFF3B281D),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(50),
                       bottomRight: Radius.circular(50),
                     ),
                   ),
                 ),
-                // Back Button
+
                 Positioned(
                   top: 50,
                   left: 20,
@@ -140,7 +137,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             const SizedBox(height: 20),
 
-            // --- 2. FLOATING REGISTRATION CARD ---
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Container(
@@ -260,16 +256,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                     const SizedBox(height: 30),
 
-                    // Sign Up Button
                     SizedBox(
                       width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _apiSignup,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(
-                            0xFF3B281D,
-                          ), // Dark Brown like Login
+                          backgroundColor: const Color(0xFF3B281D),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -296,7 +289,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
             const SizedBox(height: 30),
 
-            // --- 3. FOOTER LINK ---
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

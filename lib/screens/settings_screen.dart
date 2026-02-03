@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pakcraft/api_connection/api_connection.dart';
@@ -7,12 +6,11 @@ import 'package:pakcraft/api_connection/model/user.dart';
 import 'package:pakcraft/credentials/user_pref/userpref.dart';
 import 'package:pakcraft/screens/login_screen.dart';
 import 'package:pakcraft/screens/reset_password.dart';
-import 'package:pakcraft/screens/static_screens.dart'; // <--- IMPORT THIS
+import 'package:pakcraft/screens/static_screens.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
-  // --- DELETE ACCOUNT LOGIC ---
   Future<void> _deleteAccount(BuildContext context) async {
     User? user = await RemUSer.readUSerInfo();
     if (user == null) return;
@@ -122,7 +120,6 @@ class SettingsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // --- ACCOUNT SECTION ---
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -206,7 +203,6 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // LINKED PRIVACY POLICY
                   _settingsOption(
                     icon: Icons.privacy_tip_outlined,
                     text: "Privacy Policy",
@@ -220,7 +216,6 @@ class SettingsScreen extends StatelessWidget {
                     },
                   ),
 
-                  // LINKED ABOUT SCREEN
                   _settingsOption(
                     icon: Icons.info_outline,
                     text: "About PakCraft",
@@ -237,7 +232,6 @@ class SettingsScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // --- APP VERSION ---
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -273,7 +267,7 @@ class SettingsScreen extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
-        color: Colors.transparent, // Makes the whole row clickable
+        color: Colors.transparent,
         child: Row(
           children: [
             Container(

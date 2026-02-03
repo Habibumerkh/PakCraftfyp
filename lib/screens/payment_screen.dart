@@ -16,39 +16,30 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   String selectedMethod = "card";
   String? selectedMobileMethod;
-  bool isProcessing = false; // Loading state
+  bool isProcessing = false;
 
-  // Controllers
   final nameController = TextEditingController();
   final cardController = TextEditingController();
   final expiryController = TextEditingController();
   final cvvController = TextEditingController();
-
   final accountNameController = TextEditingController();
   final accountNumberController = TextEditingController();
-
   final fullNameController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
   final cityController = TextEditingController();
 
-  // --- PLACE ORDER FUNCTION ---
   Future<void> _processPayment() async {
-    // 1. Validation Logic
     if (!_validateFields()) return;
-
     setState(() => isProcessing = true);
 
-    // 2. Get User Info
     User? user = await RemUSer.readUSerInfo();
     if (user == null) return;
 
-    // 3. Prepare Data
     String paymentMethod = selectedMethod;
     String paymentDetails = "";
 
     if (selectedMethod == 'card') {
-      // Mask the card number for security (e.g., **** 1234)
       String cardNum = cardController.text;
       String last4 = cardNum.length > 4
           ? cardNum.substring(cardNum.length - 4)
@@ -64,7 +55,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
     String fullAddress = "${addressController.text}, ${cityController.text}";
 
-    // 4. Send to Server
     try {
       var res = await http.post(
         Uri.parse(API.placeOrder),
@@ -79,13 +69,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
       var data = json.decode(res.body);
       if (res.statusCode == 200 && data['success'] == true) {
-        // Success! Go to Success Screen
         if (!mounted) return;
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const OrderSuccessScreen()),
           (route) =>
-              false, // Remove back stack so they can't go back to payment
+              false,
         );
       } else {
         _showError("Failed: ${data['message'] ?? data['error']}");
@@ -203,9 +192,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
-
-  // ... (Keep your existing Widget helpers: _paymentOption, _buildCardDetails, etc. exactly as they were in your code)
-  // I am re-pasting them here for completeness so you can copy-paste the whole file easily.
 
   Widget _paymentOption({
     required String method,

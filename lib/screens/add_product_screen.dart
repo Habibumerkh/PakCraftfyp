@@ -6,9 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pakcraft/api_connection/api_connection.dart';
 import 'package:pakcraft/api_connection/model/user.dart';
 import 'package:pakcraft/credentials/user_pref/userpref.dart';
-import 'package:pakcraft/screens/home_screen.dart'; // Added for Nav
-import 'package:pakcraft/screens/favorites_screen.dart'; // Added for Nav
-import 'package:pakcraft/screens/profile_screen.dart'; // Added for Nav
+import 'package:pakcraft/screens/home_screen.dart'; 
+import 'package:pakcraft/screens/favorites_screen.dart'; 
+import 'package:pakcraft/screens/profile_screen.dart'; 
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -138,7 +138,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       appBar: AppBar(
         backgroundColor: bgColor,
         elevation: 0,
-        automaticallyImplyLeading: false, // REMOVED BACK BUTTON
+        automaticallyImplyLeading: false, 
         title: Text(
           "Add Product",
           style: TextStyle(
@@ -289,7 +289,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 
-  // --- NAVIGATION BAR ---
 
   Widget _buildBottomNav() {
     return Container(

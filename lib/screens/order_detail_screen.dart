@@ -8,13 +8,9 @@ class OrderDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Extract the items list we got from the previous screen
     List items = order['items'];
-
-    // 2. Fix Date Format
     String date = order['created_at'].toString().split(' ')[0];
 
-    // 3. Status Color
     Color statusColor = order['order_status'] == 'Completed'
         ? Colors.green
         : const Color(0xFFFF8A00);
@@ -38,7 +34,6 @@ class OrderDetailScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // --- HEADER CARD ---
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -88,7 +83,6 @@ class OrderDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // --- ITEMS LIST (No Loading needed!) ---
             Column(
               children: items.map((item) {
                 String imageUrl =
@@ -148,8 +142,6 @@ class OrderDetailScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-
-            // --- ADDRESS CARD ---
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
