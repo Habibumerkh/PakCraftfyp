@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:pakcraft/api_connection/api_connection.dart';
 import 'package:pakcraft/api_connection/model/user.dart';
 import 'package:pakcraft/credentials/user_pref/userpref.dart';
-import 'package:pakcraft/screens/order_detail_screen.dart'; 
+import 'package:pakcraft/screens/order_detail_screen.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   const MyOrdersScreen({super.key});
